@@ -1,0 +1,58 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>LED NBK Fetch</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 384px;
+      height: 64px;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(90deg, #1e3c72, #2a5298);
+      color: #fff;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      font-size: 26px;
+      font-weight: bold;
+    }
+    .section {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  </style>
+</head>
+<body>
+  <div class="section" id="rate">Загрузка...</div>
+
+  <script>
+    async function fetchRates() {
+      try {
+        const res = await fetch("rates.json");
+        const data = await res.json();
+        const rates = [
+          `USD: ${data.USD}₸`,
+          `EUR: ${data.EUR}₸`,
+          `RUB: ${data.RUB}₸`,
+          `CNY: ${data.CNY}₸`
+        ];
+        let i = 0;
+        document.getElementById("rate").innerText = rates[i];
+        setInterval(() => {
+          i = (i + 1) % rates.length;
+          document.getElementById("rate").innerText = rates[i];
+        }, 3000);
+      } catch (e) {
+        document.getElementById("rate").innerText = "Ошибка загрузки";
+      }
+    }
+
+    fetchRates();
+  </script>
+</body>
+</html>
